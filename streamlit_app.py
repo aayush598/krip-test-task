@@ -6,7 +6,7 @@ st.set_page_config(page_title="Gemini Chatbot", page_icon="🤖")
 st.title("🤖 Gemini Chatbot with Prompt Versioning")
 
 # API endpoint
-API_URL = "https://localhost:8000/chat"  # Change to your deployed URL if hosted
+API_URL = "http://localhost:8000/chat"  # Change to your deployed URL if hosted
 
 # Prompt version options
 prompt_versions = ["v1", "v2"]
