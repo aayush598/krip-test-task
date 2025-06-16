@@ -9,7 +9,7 @@ def run_fastapi():
 def run_streamlit():
     subprocess.run([
         "streamlit", "run", "streamlit_app.py",
-        "--server.port=8501", "--server.enableCORS=false"
+        "--server.port=8501", "--server.enableCORS=false", "--server.enableXsrfProtection=false"
     ])
 
 if __name__ == "__main__":

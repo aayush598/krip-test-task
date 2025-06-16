@@ -29,6 +29,11 @@ class ChatRequest(BaseModel):
     message: str
     prompt_version: str
 
+@app.get("/")
+def read_root():
+    return {"message": "Welcome to Gemini Chatbot API"}
+
+
 @app.post("/chat")
 async def chat(req: ChatRequest):
     prompt = load_prompt(req.prompt_version)
