@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.responses import RedirectResponse, HTMLResponse
 from pydantic import BaseModel
 from utils.prompt_loader import load_prompt
 from utils.logger import log_request
@@ -29,10 +30,24 @@ class ChatRequest(BaseModel):
     message: str
     prompt_version: str
 
-@app.get("/")
-def read_root():
-    return {"message": "Welcome to Gemini Chatbot API"}
+@app.get("/", include_in_schema=False)
+def root():
+    return RedirectResponse(url="/ui")
 
+@app.get("/ui", include_in_schema=False)
+def serve_streamlit_ui():
+    streamlit_url = "http://localhost:10000"  # Streamlit runs on this internally
+    html_content = f"""
+    <html>
+        <head>
+            <title>Gemini Chatbot UI</title>
+        </head>
+        <body style="margin:0;padding:0;overflow:hidden">
+            <iframe src="{streamlit_url}" style="width:100%; height:100vh; border:none;"></iframe>
+        </body>
+    </html>
+    """
+    return HTMLResponse(content=html_content)
 
 @app.post("/chat")
 async def chat(req: ChatRequest):
