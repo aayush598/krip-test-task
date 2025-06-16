@@ -1,6 +1,4 @@
-Here's a complete `README.md` for your **Gemini Chatbot with Prompt Versioning** project using **FastAPI**, **Streamlit**, and **Google Gemini API**:
 
----
 
 ## 🤖 Gemini Chatbot with Prompt Versioning
 

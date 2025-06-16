@@ -23,7 +23,7 @@ app = FastAPI()
 metrics = {
     "total_requests": 0,
     "requests_per_version": defaultdict(int),
-    "response_times": []
+    "response_times": []        
 }
 
 # Pydantic model
