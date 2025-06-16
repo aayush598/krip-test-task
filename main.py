@@ -7,6 +7,7 @@ import os, time
 from dotenv import load_dotenv
 from collections import defaultdict
 from google import genai
+import sqlite3
 
 # Load .env and Gemini API key
 load_dotenv()
@@ -78,12 +79,25 @@ async def chat(req: ChatRequest):
 
 @app.get("/metrics")
 def get_metrics():
-    avg_time = (
-        sum(metrics["response_times"]) / len(metrics["response_times"])
-        if metrics["response_times"] else 0
-    )
+    conn = sqlite3.connect("logs.db")
+    cursor = conn.cursor()
+
+    # Get total number of requests
+    cursor.execute("SELECT COUNT(*) FROM logs")
+    total_requests = cursor.fetchone()[0]
+
+    # Get request count per prompt version
+    cursor.execute("SELECT prompt_version, COUNT(*) FROM logs GROUP BY prompt_version")
+    requests_per_version = {version: count for version, count in cursor.fetchall()}
+
+    # Get average response time
+    cursor.execute("SELECT AVG(duration) FROM logs")
+    avg_time = cursor.fetchone()[0] or 0.0
+
+    conn.close()
+
     return {
-        "total_requests": metrics["total_requests"],
-        "requests_per_version": dict(metrics["requests_per_version"]),
+        "total_requests": total_requests,
+        "requests_per_version": requests_per_version,
         "average_response_time": round(avg_time, 3)
     }
