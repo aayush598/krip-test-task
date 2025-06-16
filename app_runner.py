@@ -2,14 +2,19 @@
 import subprocess
 import threading
 import uvicorn
+import time
 
 def run_fastapi():
     uvicorn.run("main:app", host="0.0.0.0", port=8000)
 
 def run_streamlit():
+    # Delay to allow FastAPI to bind first
+    time.sleep(5)
     subprocess.run([
         "streamlit", "run", "streamlit_app.py",
-        "--server.port=8501", "--server.enableCORS=false", "--server.enableXsrfProtection=false"
+        "--server.port=10000",                  # This will become the public Render port
+        "--server.enableCORS=false",
+        "--server.enableXsrfProtection=false"
     ])
 
 if __name__ == "__main__":
